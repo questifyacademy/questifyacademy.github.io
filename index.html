@@ -51,8 +51,6 @@
   .dot{width:10px;height:10px;border-radius:50%}.r{background:#ff5f56}.y{background:#ffbd2e}.g{background:#27c93f}
   .title{font-size:19px;font-weight:700;letter-spacing:1px;color:var(--accent);white-space:nowrap}
   .header-center{display:flex;align-items:center;gap:10px;flex-shrink:0}
-  .visitor-badge{font-size:10px;color:var(--muted2);line-height:1.35;padding:5px 10px;border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.02);white-space:nowrap;text-align:center}
-  .visitor-badge strong{display:block;font-size:13px;color:var(--muted);font-weight:600}
   .header-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
 
   /* BUTTONS */
@@ -106,9 +104,7 @@
   #browserOverlay.open{opacity:1;pointer-events:auto;transform:translateY(0)}
   #browserOverlay.closing{opacity:1;pointer-events:none;transform:translateY(100%)}
   #browserFrame{width:100%;height:100%;border:0;background:#fff}
-  #browserClose{position:fixed;top:14px;right:14px;z-index:3100;width:36px;height:36px;border-radius:9px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.8);backdrop-filter:blur(8px);color:#fff;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.5);transition:background .12s,border-color .12s}
-  #browserClose.visible{display:flex}
-  #browserClose:hover{background:rgba(30,30,30,.95);border-color:rgba(255,255,255,.35)}
+  #browserClose { display: none !important; }
 
   /* SETTINGS PANEL */
   .settings-overlay{position:fixed;inset:0;z-index:4500;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;padding-bottom:24px}
@@ -174,10 +170,7 @@
       <div class="title">unblocked-games</div>
     </div>
     <div class="header-center">
-      <div class="visitor-badge">
-        <span>F students visited</span>
-        <strong id="visitorCount">—</strong>
-      </div>
+  
     </div>
     <div class="header-actions">
       <button class="btn" id="settingsBtn" type="button">
@@ -411,6 +404,7 @@ const THEMES = [
 // Your original splash texts, preserved exactly
 const SPLASH_TEXTS = [
   'hello OLMC students',
+  'dominik and matthew do your work please.',
   'Loading ' + (()=>raw.split(/\r?\n/).map(v=>v.trim()).filter(Boolean).length)() + ' games...',
   'welcome to the wrost website ever',
   'now in colour!!!1',
@@ -457,25 +451,11 @@ const panicKeyDisplay= document.getElementById('panicKeyDisplay');
 const recordPanicBtn = document.getElementById('recordPanicBtn');
 const panicUrlInput  = document.getElementById('panicUrlInput');
 const savePanicBtn   = document.getElementById('savePanicBtn');
-const visitorCount   = document.getElementById('visitorCount');
 
 let gameOpen = false, browserOpen = false, recordingPanic = false;
 let panicKey = {key:'x', alt:true, shift:false, ctrl:false};
 
-// ── VISITOR COUNTER ──
-(async function loadVisitorCount(){
-  try {
-    const res = await fetch('https://api.countapi.xyz/hit/questify-unblocked/f-students-visited');
-    const data = await res.json();
-    if (data && typeof data.value === 'number') {
-      visitorCount.textContent = data.value.toLocaleString();
-    }
-  } catch {
-    let v = parseInt(localStorage.getItem('_vc')||'0') + 1;
-    localStorage.setItem('_vc', v);
-    visitorCount.textContent = v.toLocaleString() + '*';
-  }
-})();
+
 
 // ── LOADER ──
 loaderSplash.textContent = SPLASH_TEXTS[Math.floor(Math.random() * SPLASH_TEXTS.length)];
